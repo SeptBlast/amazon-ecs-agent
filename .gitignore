@@ -20,3 +20,5 @@ _bin/
 *.iml
 cover.out
 coverprofile.out
+.dccache
+.vscode/
