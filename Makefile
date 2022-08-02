@@ -18,11 +18,11 @@ TARGET_OS=linux
 .PHONY: all gobuild static xplatform-build docker release certs test clean netkitten test-registry benchmark-test gogenerate run-integ-tests pause-container get-cni-sources cni-plugins test-artifacts
 BUILD_PLATFORM:=$(shell uname -m)
 
-ifeq (${BUILD_PLATFORM},aarch64)
-	GOARCH=arm64
-else
+# ifeq (${BUILD_PLATFORM},aarch64)
+# 	GOARCH=arm64
+# else
 	GOARCH=amd64
-endif
+# endif
 
 ifeq (${TARGET_OS},windows)
 	GO_VERSION=$(shell cat ./GO_VERSION_WINDOWS)
@@ -53,12 +53,15 @@ static-with-pause:
 
 # Cross-platform build target for static checks
 xplatform-build:
-	GOOS=linux GOARCH=arm64 ./scripts/build true "" false
-	GOOS=windows GOARCH=amd64 ./scripts/build true "" false
+	# GOOS=linux GOARCH=arm64 ./scripts/build true "" false
+	# GOOS=windows GOARCH=amd64 ./scripts/build true "" false
 	# Agent and its dependencies on Go 1.18.x are not compatible with Mac (Darwin).
 	# Mac is not a supported target platform for Agent, so commenting out 
 	# cross-platform build step for Mac temporarily.
-	# GOOS=darwin GOARCH=amd64 ./scripts/build true "" false
+	GOOS=darwin GOARCH=amd64 ./scripts/build true "" false
+
+# BUILDER_IMAGE_TAG=$(shell cat ./VERSION)
+# BUILDER_IMAGE_REPO_HOST="lookout"
 
 BUILDER_IMAGE="amazon/amazon-ecs-agent-build:make"
 .builder-image-stamp: scripts/dockerfiles/Dockerfile.build
